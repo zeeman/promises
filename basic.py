@@ -10,8 +10,8 @@ def add(a, b):
 def sub(a, b):
     return a - b
 
-sub(5, 2)        # works
-sub('5', '2')    # raises TypeError
+# sub(5, 2)        # works
+# sub('5', '2')    # raises TypeError
 
-add('Hel', 'lo') # works
-add(1, 2)        # raises ReturnError
+# add('Hel', 'lo') # works
+# add(1, 2)        # raises ReturnError
