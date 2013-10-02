@@ -1,3 +1,5 @@
+from collections import Container
+
 MUST_RETURN_TYPE_SINGULAR = "Function `{0}` must return type {1}"
 MUST_RETURN_TYPE_PLURAL = "Function `{0}` must return one of these types: {1}"
 MUST_BE_OF_TYPE_SINGULAR = "Argument {0} to function `{1}` must be of type {2}"
@@ -39,7 +41,7 @@ def accepts(*arg_types, **kwarg_types):
             i = 0
             for at in args_n_types:
                 if at[1] is not None and not isinstance(at[0], at[1]):
-                    if len(at[1]) > 2:
+                    if isinstance(at[1], ()):
                         raise TypeError(MUST_BE_OF_TYPE_PLURAL.format(i, f.__name__, type_name(at[1])))
                     else:
                         raise TypeError(MUST_BE_OF_TYPE_SINGULAR.format(i, f.__name__, type_name(at[1])))
@@ -49,7 +51,7 @@ def accepts(*arg_types, **kwarg_types):
             for arg in kwarg_types:
                 if arg in kwargs:
                     if not kwarg_types[arg] is not None and not isinstance(kwargs[arg], kwarg_types[arg]):
-                        if len(arg) > 2:
+                        if isinstance(kwarg_types[arg], Container) and len(arg) > 2:
                             raise TypeError(MUST_BE_OF_TYPE_PLURAL.format(arg, f.__name__, type_name(kwarg_types[arg])))
                         else:
                             raise TypeError(MUST_BE_OF_TYPE_SINGULAR.format(arg, f.__name__, type_name(kwarg_types[arg])))
@@ -63,7 +65,7 @@ def returns(return_type):
         def inner_wrapper(*args, **kwargs):
             ret = f(*args, **kwargs)
             if not isinstance(ret, return_type):
-                if len(return_type) > 2:
+                if isinstance(return_type, Container) and len(return_type) > 2:
                     raise ReturnException(MUST_RETURN_TYPE_PLURAL.format(f.__name__, type_name(return_type)))
                 else:
                     raise ReturnException(MUST_RETURN_TYPE_SINGULAR.format(f.__name__, type_name(return_type)))

@@ -1,5 +1,5 @@
-import promise
 import unittest
+from promises import promise
 
 
 class TestPromise(unittest.TestCase):
